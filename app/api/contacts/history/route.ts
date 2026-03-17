@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     // Filter by ownership if not admin
     const filteredLogs = isAdmin 
       ? logs 
-      : logs?.filter(log => log.campaigns?.user_id === user.id)
+      : logs?.filter((log: any) => log.campaigns?.user_id === user.id)
 
     return NextResponse.json(filteredLogs || [])
   } catch (err) {
