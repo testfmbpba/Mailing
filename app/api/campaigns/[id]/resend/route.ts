@@ -29,8 +29,12 @@ export async function POST(
       sent_at: null,
     }).eq('id', params.id)
 
-    // Delete previous logs so they don't interfere
-    await service.from('email_logs').delete().eq('campaign_id', params.id)
+    /* 
+       We no longer delete previous logs so they appear in the history.
+       The campaign stats are reset above, and new logs will be created
+       by the /send route.
+    */
+    // await service.from('email_logs').delete().eq('campaign_id', params.id)
 
     // Trigger the send
     // Trigger the send

@@ -21,11 +21,13 @@ export async function GET(request: Request) {
     const service = createServiceClient()
 
     // Fetch logs joined with campaigns
-    let query = service
+    // Using a more explicit join and returning all matches for the email
+    const { data: logs, error } = await service
       .from('email_logs')
       .select(`
         *,
-        campaigns (
+        campaigns:campaign_id (
+          id,
           name,
           user_id
         )
@@ -33,14 +35,13 @@ export async function GET(request: Request) {
       .eq('email', email)
       .order('created_at', { ascending: false })
 
-    const { data: logs, error } = await query
-
     if (error) throw error
 
     // Filter by ownership if not admin
+    // We check if campaign object exists and belongs to the user
     const filteredLogs = isAdmin 
       ? logs 
-      : logs?.filter((log: any) => log.campaigns?.user_id === user.id)
+      : logs?.filter((log: any) => log.campaigns && log.campaigns.user_id === user.id)
 
     return NextResponse.json(filteredLogs || [])
   } catch (err) {
