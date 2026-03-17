@@ -61,8 +61,9 @@ export default async function CampaignsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {campaigns.map((c: { id: string; name: string; status: string; from_email: string; total_recipients: number; opened_count: number; sent_count: number; scheduled_at: string | null; email_templates: { name: string } | null }) => {
-                  const rate = c.sent_count > 0 ? ((c.opened_count / c.sent_count) * 100).toFixed(0) : '0'
+                {campaigns.map((c: { id: string; name: string; status: string; from_email: string; total_recipients: number; opened_count: number; sent_count: number; failed_count: number; scheduled_at: string | null; email_templates: { name: string } | null }) => {
+                  const delivered = Math.max(0, (c.total_recipients || 0) - (c.failed_count || 0))
+                  const rate = delivered > 0 ? Math.min(100, Math.round((c.opened_count / delivered) * 100)) : 0
                   return (
                     <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-6 py-4">
