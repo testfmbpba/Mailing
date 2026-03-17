@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { Plus, Mail, BarChart3 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import CampaignActions from './CampaignActions'
 
 const statusLabels: Record<string, string> = {
   draft: 'Borrador', scheduled: 'Programado', sending: 'Enviando',
@@ -80,10 +81,17 @@ export default async function CampaignsPage() {
                       <td className="px-6 py-4 text-right text-sm text-gray-600">{c.opened_count.toLocaleString()}</td>
                       <td className="px-6 py-4 text-right text-sm font-medium text-[#67b960]">{rate}%</td>
                       <td className="px-6 py-4 text-right text-xs text-gray-400">{formatDate(c.scheduled_at)}</td>
-                      <td className="px-6 py-4 text-right">
-                        <Link href={`/campaigns/${c.id}`} className="text-[#4ea1ee] hover:underline text-sm flex items-center gap-1 justify-end">
-                          <BarChart3 className="w-3.5 h-3.5" /> Ver
-                        </Link>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3 justify-end">
+                          <Link href={`/campaigns/${c.id}`} className="text-[#4ea1ee] hover:underline text-sm flex items-center gap-1">
+                            <BarChart3 className="w-3.5 h-3.5" /> Ver
+                          </Link>
+                          <CampaignActions
+                            campaignId={c.id}
+                            campaignName={c.name}
+                            status={c.status}
+                          />
+                        </div>
                       </td>
                     </tr>
                   )
