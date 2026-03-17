@@ -27,7 +27,8 @@ export default async function AdminDashboardPage() {
     failed: acc.failed + (c.failed_count || 0),
   }), { sent: 0, opened: 0, failed: 0 })
 
-  const openRate = totals.sent > 0 ? ((totals.opened / totals.sent) * 100).toFixed(1) : '0'
+  const delivered = Math.max(0, totals.sent - totals.failed)
+  const openRate = delivered > 0 ? Math.min(100, (totals.opened / delivered) * 100).toFixed(1) : '0'
 
   return (
     <div>
