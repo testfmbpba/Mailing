@@ -2,6 +2,8 @@
 
 Portal web fullstack para envío, tracking y gestión de campañas de email.
 
+## FM 
+
 ## Stack
 
 - **Frontend:** Next.js 14 (App Router) + TypeScript + Tailwind CSS
