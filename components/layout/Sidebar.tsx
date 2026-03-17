@@ -15,6 +15,7 @@ const navItems = [
   { href: '/contacts', label: 'Contactos', icon: Users },
   { href: '/campaigns', label: 'Campañas', icon: Mail },
   { href: '/scheduler', label: 'Programación', icon: Clock },
+  { href: '/history', label: 'Historial', icon: BarChart3 },
 ]
 
 export default function Sidebar({ profile }: { profile: Profile | null }) {
