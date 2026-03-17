@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, Users, Trash2, Eye, Plus, FileSpreadsheet } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { formatDate } from '@/lib/utils'
 import * as XLSX from 'xlsx'
@@ -86,8 +87,8 @@ export default function ContactsPage() {
     if (error || !list) { toast.error('Error al crear la lista'); setUploading(false); return }
 
     // Insert contacts in batches
-    const emailKey = parsedData.columns.find(c => c.toLowerCase() === 'email') || 'email'
-    const contacts = parsedData.rows.map(row => ({
+    const emailKey = parsedData.columns.find((c: string) => c.toLowerCase() === 'email') || 'email'
+    const contacts = parsedData.rows.map((row: Record<string, string>) => ({
       list_id: list.id,
       email: row[emailKey],
       data: row,
@@ -153,15 +154,15 @@ export default function ContactsPage() {
                     <table className="w-full text-xs">
                       <thead>
                         <tr className="bg-gray-100">
-                          {parsedData.columns.slice(0, 5).map(c => (
+                          {parsedData.columns.slice(0, 5).map((c: string) => (
                             <th key={c} className="px-3 py-2 text-left font-medium text-gray-600">{c}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {parsedData.rows.slice(0, 5).map((row, i) => (
+                        {parsedData.rows.slice(0, 5).map((row: Record<string, string>, i: number) => (
                           <tr key={i} className="border-t border-gray-100">
-                            {parsedData.columns.slice(0, 5).map(c => (
+                            {parsedData.columns.slice(0, 5).map((c: string) => (
                               <td key={c} className="px-3 py-2 text-gray-600 truncate max-w-24">{row[c]}</td>
                             ))}
                           </tr>
@@ -198,7 +199,7 @@ export default function ContactsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {lists.map(list => (
+          {lists.map((list: ContactList) => (
             <div key={list.id} className="card p-5 group hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
@@ -213,11 +214,16 @@ export default function ContactsPage() {
                 <span className="font-medium text-gray-700">{list.total_contacts.toLocaleString()}</span> contactos
               </p>
               <div className="flex flex-wrap gap-1">
-                {(list.columns || []).slice(0, 4).map(c => (
+                {(list.columns || []).slice(0, 4).map((c: string) => (
                   <span key={c} className="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full">{c}</span>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-3">{formatDate(list.created_at)}</p>
+              <div className="flex items-center justify-between mt-3">
+                <p className="text-xs text-gray-400">{formatDate(list.created_at)}</p>
+                <Link href={`/contacts/${list.id}`} className="text-xs text-[#4ea1ee] hover:underline font-medium flex items-center gap-1">
+                  <Eye className="w-3 h-3" /> Ver contactos
+                </Link>
+              </div>
             </div>
           ))}
         </div>
