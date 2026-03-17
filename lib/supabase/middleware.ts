@@ -39,20 +39,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (profile?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-  }
+  // Admin role check is handled in app/admin/layout.tsx (runs in Node.js runtime, not Edge)
 
   if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register') && user) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
