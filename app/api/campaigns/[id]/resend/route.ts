@@ -33,15 +33,23 @@ export async function POST(
     await service.from('email_logs').delete().eq('campaign_id', params.id)
 
     // Trigger the send
+    // Trigger the send
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `https://${request.headers.get('host')}`
     const sendRes = await fetch(`${baseUrl}/api/campaigns/send`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        // Forward cookies for authentication in the internal call
+        'Cookie': request.headers.get('cookie') || ''
+      },
       body: JSON.stringify({ campaign_id: params.id }),
     })
 
     const data = await sendRes.json()
-    if (!sendRes.ok) return NextResponse.json({ error: data.error || 'Send failed' }, { status: 500 })
+    if (!sendRes.ok) {
+      console.error('Send trigger failed:', data)
+      return NextResponse.json({ error: data.error || 'Send failed' }, { status: 500 })
+    }
 
     return NextResponse.json({ ok: true, ...data })
   } catch (err) {

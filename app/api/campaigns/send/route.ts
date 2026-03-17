@@ -64,7 +64,7 @@ export async function POST(request: Request) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: `${campaign.from_name} <onboarding@resend.dev>`,
+            from: `${campaign.from_name} <${campaign.from_email}>`,
             to: [contact.email],
             subject: personalizedSubject,
             html: finalHtml,
