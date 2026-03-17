@@ -17,7 +17,7 @@ export default function NewCampaignPage() {
     template_id: '',
     contact_list_id: '',
     from_name: '',
-    from_email: '',
+    from_email: 'onboarding@resend.dev',
     reply_to: '',
     schedule: false,
     scheduled_at: '',

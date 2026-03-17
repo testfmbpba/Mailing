@@ -10,22 +10,21 @@ export async function GET(
 ) {
   try {
     const supabase = createServiceClient()
-    const { data: log } = await supabase
+    // Atomic update: only succeeds if opened_at is still null
+    const { data: updatedLog } = await supabase
       .from('email_logs')
-      .select('id, campaign_id, opened_at, status')
+      .update({ 
+        status: 'opened', 
+        opened_at: new Date().toISOString() 
+      })
       .eq('tracking_id', params.trackingId)
+      .is('opened_at', null)
+      .select('campaign_id')
       .single()
 
-    if (log && !log.opened_at) {
-      const now = new Date().toISOString()
-      // Update log
-      await supabase
-        .from('email_logs')
-        .update({ status: 'opened', opened_at: now })
-        .eq('id', log.id)
-
-      // Increment campaign opened_count
-      await supabase.rpc('increment_opened_count', { campaign_id: log.campaign_id })
+    if (updatedLog) {
+      // Only increment if we were the ones who actually marked it as opened
+      await supabase.rpc('increment_opened_count', { campaign_id: updatedLog.campaign_id })
     }
   } catch {}
 
