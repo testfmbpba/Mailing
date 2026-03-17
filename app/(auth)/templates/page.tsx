@@ -36,7 +36,7 @@ export default async function TemplatesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {templates.map((t: any) => (
+          {templates.map((t: { id: string; name: string; subject: string; variables: string[] | null; created_at: string }) => (
             <div key={t.id} className="card p-5 hover:shadow-md transition-shadow group">
               <div className="flex items-start justify-between mb-3">
                 <div className="w-10 h-10 bg-[#67b960]/10 rounded-xl flex items-center justify-center">

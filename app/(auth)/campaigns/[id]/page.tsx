@@ -140,7 +140,7 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {logs.map((log: any) => (
+                {logs.map((log: { id: string; email: string; status: string; sent_at: string | null; opened_at: string | null; error_message: string | null }) => (
                   <tr key={log.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-3 text-sm text-gray-700">{log.email}</td>
                     <td className="px-6 py-3">

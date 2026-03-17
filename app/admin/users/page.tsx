@@ -26,7 +26,7 @@ export default async function AdminUsersPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {(users || []).map((u: any) => (
+            {(users || []).map((u: { id: string; full_name: string | null; email: string | null; role: string; active: boolean; created_at: string }) => (
               <tr key={u.id} className="hover:bg-gray-50/50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

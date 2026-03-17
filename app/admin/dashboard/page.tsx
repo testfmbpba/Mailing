@@ -20,7 +20,7 @@ export default async function AdminDashboardPage() {
     supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(10),
   ])
 
-  const totals = (allCampaigns || []).reduce((acc: { sent: number; opened: number; failed: number }, c) => ({
+  const totals = (allCampaigns || []).reduce((acc: { sent: number; opened: number; failed: number }, c: { sent_count: number | null; opened_count: number | null; failed_count: number | null }) => ({
     sent: acc.sent + (c.sent_count || 0),
     opened: acc.opened + (c.opened_count || 0),
     failed: acc.failed + (c.failed_count || 0),
@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
             <Link href="/admin/users" className="text-sm text-[#4ea1ee] hover:underline">Ver todos →</Link>
           </div>
           <div className="divide-y divide-gray-50">
-            {(recentUsers || []).map((u: any) => (
+            {(recentUsers || []).map((u: { id: string; full_name: string | null; email: string | null; role: string; active: boolean }) => (
               <div key={u.id} className="flex items-center gap-3 px-5 py-3">
                 <div className="w-8 h-8 rounded-full bg-[#67b960]/10 flex items-center justify-center text-sm font-medium text-[#67b960]">
                   {(u.full_name || u.email || '?')[0].toUpperCase()}

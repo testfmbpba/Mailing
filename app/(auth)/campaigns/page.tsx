@@ -61,7 +61,7 @@ export default async function CampaignsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {campaigns.map((c: any) => {
+                {campaigns.map((c: { id: string; name: string; status: string; from_email: string; total_recipients: number; opened_count: number; sent_count: number; scheduled_at: string | null; email_templates: { name: string } | null }) => {
                   const rate = c.sent_count > 0 ? ((c.opened_count / c.sent_count) * 100).toFixed(0) : '0'
                   return (
                     <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">

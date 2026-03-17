@@ -24,8 +24,9 @@ export default async function SchedulerPage() {
   if (profile?.role !== 'admin') query.eq('user_id', user!.id)
   const { data: campaigns } = await query
 
-  const upcoming = (campaigns || []).filter((c: any) => c.status === 'scheduled')
-  const past = (campaigns || []).filter((c: any) => c.status !== 'scheduled')
+  type Campaign = { id: string; name: string; status: string; scheduled_at: string | null; total_recipients: number; sent_count: number; opened_count: number; email_templates: { name: string } | null }
+  const upcoming = (campaigns || []).filter((c: Campaign) => c.status === 'scheduled')
+  const past = (campaigns || []).filter((c: Campaign) => c.status !== 'scheduled')
 
   return (
     <div>
@@ -54,7 +55,7 @@ export default async function SchedulerPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {upcoming.map((c: any) => (
+            {upcoming.map((c: Campaign) => (
               <div key={c.id} className="card p-5 flex items-center gap-4">
                 <div className="w-12 h-12 bg-[#67b960]/10 rounded-xl flex flex-col items-center justify-center shrink-0">
                   <Calendar className="w-5 h-5 text-[#67b960]" />
@@ -92,7 +93,7 @@ export default async function SchedulerPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {past.map((c: any) => {
+                {past.map((c: Campaign) => {
                   const rate = c.sent_count > 0 ? ((c.opened_count / c.sent_count) * 100).toFixed(0) : '0'
                   return (
                     <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
