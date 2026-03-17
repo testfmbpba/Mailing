@@ -6,6 +6,7 @@ import Link from 'next/link'
 export default async function AdminDashboardPage() {
   const supabase = createClient()
 
+
   const [
     { count: userCount },
     { count: campaignCount },

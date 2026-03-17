@@ -15,7 +15,7 @@ export async function GET(
     .eq('campaign_id', params.id)
     .order('created_at', { ascending: true })
 
-  const exportData = (logs || []).map(l => ({
+  const exportData = (logs || []).map((l: { email: string; status: string; sent_at: string | null; opened_at: string | null; error_message: string | null }) => ({
     Email: l.email,
     Estado: l.status,
     'Fecha envío': l.sent_at ? new Date(l.sent_at).toLocaleString('es-AR') : '',
